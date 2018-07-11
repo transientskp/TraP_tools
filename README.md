@@ -24,3 +24,4 @@ Various other useful tools
   * SigmaFit(data) - fits a gaussian distribution to data and returns the fit parameters
   * extract_data(filename) - extracts data from a csv file
   * write_data(filename,tmp) - writes data into a csv file
+  * animation_zoom.ipynb - IPython notebook which creates a movie from a collection of images, allowing for the user to specify a zoom-in window on a target of interest. Based on the animation prototype created by Mark in his scratchpad repo.

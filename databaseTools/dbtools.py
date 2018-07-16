@@ -44,7 +44,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
             if value.lower() == "varmetric":
                 y = session.query(Varmetric).join(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
                 dy = pd.read_sql_query(y.statement,db.connection)
-                dy.rename(index=str,columns={'id':'newsourceid'})
+                dy = dy.rename(index=str,columns={'id':'newsourceid'})
             if value.lower() == "extracteource":
                 y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
             if value.lower() == "extradsource":

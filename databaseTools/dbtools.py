@@ -37,13 +37,20 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
     if kwargs is not None:
         for key,value in kwargs.iteritems():
             if value.lower() == "extractedsource":
-            y = session.query(print(value).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
+                y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
+            if value.lower() == "varmetric":
+                y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
+            if value.lower() == "extracteource":
+                y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
+            if value.lower() == "extradsource":
+                y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
+
             dy = pd.read_sql_query(y.statement,db.connection)
             try:
-                merged = pd.merge(dx,dy,on=['id','runcat'])
+                dx = pd.merge(dx,dy,on=['id','runcat'])
             except:
                 print "error no column runcat trying different method:"
-                merged = pd.merge(dx,dy,on=['id'])
+                dx = pd.merge(dx,dy,on=['id'])
             dy = []
 
     # dx = pd.read_sql_query(x.statement,db.connection)

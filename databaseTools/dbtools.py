@@ -27,14 +27,29 @@ def GetVarParams(session,dataset_id):
 
 def GetPandaExtracted(session,dataset_id,**kwargs):
     x = session.query(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
-    y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
     dx = pd.read_sql_query(x.statement,db.connection)
-    dy = pd.read_sql_query(y.statement,db.connection)
-
     # here we rename entries in runcat to their proper names
     dx = dx.rename(index=str,columns={'id' : 'runcat','xtrsrc':'id'})
     # here we drop duplicate columns from runcat
     dx = dx.drop(columns = {'x','y','z','zone'})
+
+    for i in kwargs:
+        y = session.query(str(i)).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
+        dy = pd.read_sql_query(y.statement,db.connection)
+        try:
+            merged = pd.merge(dx,dy,on=['id','runcat'])
+        except:
+            print "error no column runcat trying different method:"
+            merged = pd.merge(dx,dy,on=['id','runcat'])
+        dy = []
+
+    # dx = pd.read_sql_query(x.statement,db.connection)
+    # dy = pd.read_sql_query(y.statement,db.connection)
+
+    # # here we rename entries in runcat to their proper names
+    # dx = dx.rename(index=str,columns={'id' : 'runcat','xtrsrc':'id'})
+    # # here we drop duplicate columns from runcat
+    # dx = dx.drop(columns = {'x','y','z','zone'})
     # here we merge runcat and extractedsource
-    merged = pd.merge(dx,dy,on=['id'])
+    # merged = pd.merge(dx,dy,on=['id'])
     return merged

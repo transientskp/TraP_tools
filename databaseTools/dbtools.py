@@ -39,7 +39,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
             if value.lower() == "extractedsource":
                 y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
             if value.lower() == "varmetric":
-                y = session.query(Extractedsource).join(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
+                y = session.query(Varmetric).join(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
             if value.lower() == "extracteource":
                 y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
             if value.lower() == "extradsource":
@@ -52,7 +52,8 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
                 print "error no column runcat&id trying merge on id:"
                 try:
                     dx = pd.merge(dx,dy,on=['id'])
-                except: "error no column id trying merge on runcat:"
+                except: 
+		    print "error no column id trying merge on runcat:"
                     dx = pd.merge(dx,dy,on=['runcat'])
             dy = []
 
@@ -65,4 +66,4 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
     # dx = dx.drop(columns = {'x','y','z','zone'})
     # here we merge runcat and extractedsource
     # merged = pd.merge(dx,dy,on=['id'])
-    return merged
+    return dx

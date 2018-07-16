@@ -32,16 +32,18 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
     dx = dx.rename(index=str,columns={'id' : 'runcat','xtrsrc':'id'})
     # here we drop duplicate columns from runcat
     dx = dx.drop(columns = {'x','y','z','zone'})
+    print dx.keys()
 
     if kwargs is not None:
-        for value in kwargs.iteritems():
-            y = session.query(str(value)).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
+        for key,value in kwargs.iteritems():
+            if value.lower() == "extractedsource":
+            y = session.query(print(value).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
             dy = pd.read_sql_query(y.statement,db.connection)
             try:
                 merged = pd.merge(dx,dy,on=['id','runcat'])
             except:
                 print "error no column runcat trying different method:"
-                merged = pd.merge(dx,dy,on=['id','runcat'])
+                merged = pd.merge(dx,dy,on=['id'])
             dy = []
 
     # dx = pd.read_sql_query(x.statement,db.connection)

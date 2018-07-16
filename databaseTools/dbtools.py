@@ -25,7 +25,7 @@ def GetVarParams(session,dataset_id):
     VarParams = session.query(Varmetric,Runningcatalog).select_from(join(Varmetric,Runningcatalog)).filter(Runningcatalog.dataset_id == dataset_id).all()
     return VarParams
 
-def GetPandaExtracted(session,dataset_id):
+def GetPandaExtracted(session,dataset_id,**kwargs):
     x = session.query(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
     y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
     dx = pd.read_sql_query(x.statement,db.connection)

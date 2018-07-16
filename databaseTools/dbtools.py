@@ -36,23 +36,28 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
 
     if kwargs is not None:
         for key,value in kwargs.iteritems():
+            # if table name = extractedsource
             if value.lower() == "extractedsource":
                 y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
+                dy = pd.read_sql_query(y.statement,db.connection)
+            # if table name = varmetric also make sure to change id name to newsourceid to avoid merge conflicts
             if value.lower() == "varmetric":
                 y = session.query(Varmetric).join(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
+                dy = pd.read_sql_query(y.statement,db.connection)
+                dy.rename(index=str,columns={'id':'newsourceid'})
             if value.lower() == "extracteource":
                 y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
             if value.lower() == "extradsource":
                 y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
 
-            dy = pd.read_sql_query(y.statement,db.connection)
+
             try:
                 dx = pd.merge(dx,dy,on=['id','runcat'])
             except:
                 print "error no column runcat&id trying merge on id:"
                 try:
                     dx = pd.merge(dx,dy,on=['id'])
-                except: 
+                except:
 		    print "error no column id trying merge on runcat:"
                     dx = pd.merge(dx,dy,on=['runcat'])
             dy = []

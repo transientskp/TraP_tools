@@ -32,7 +32,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
     dx = dx.rename(index=str,columns={'id' : 'runcat','xtrsrc':'id'})
     # here we drop duplicate columns from runcat
     dx = dx.drop(columns = {'x','y','z','zone'})
-    print dx.keys()
+
 
     if kwargs is not None:
         for key,value in kwargs.iteritems():
@@ -53,7 +53,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
                 dy = pd.read_sql_query(y.statement,db.connection)
                 dy = dy.rename(index=str,columns={'id':'newsource'})
                 dy = dy.rename(index=str,columns={'trigger_xtrsrc':'id'})
-                print dy.keys()
+
 
             if value.lower() == "image":
                 y = session.query(Image).filter(Image.dataset_id == dataset_id)
@@ -62,7 +62,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
 
 
             # try:
-            print dx.keys()
+        
             same_col = dy.columns.intersection(dx.columns)
             dx = pd.merge(dx,dy,on=list(same_col))
             # except:

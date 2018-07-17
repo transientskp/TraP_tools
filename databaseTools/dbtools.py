@@ -53,6 +53,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
                 dy = pd.read_sql_query(y.statement,db.connection)
                 dy = dy.rename(index=str,columns={'id':'newsourceid'})
                 dy = dy.rename(index=str,columns={'trigger_xtrsrc':'id'})
+                print dy.keys()
 
             if value.lower() == "image":
                 y = session.query(Image).filter(Image.dataset_id == dataset_id)
@@ -61,6 +62,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
 
 
             # try:
+            print dx.keys()
             same_col = dy.columns.intersection(dx.columns)
             dx = pd.merge(dx,dy,on=list(same_col))
             # except:

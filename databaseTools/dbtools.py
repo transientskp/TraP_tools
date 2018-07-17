@@ -13,7 +13,7 @@ import pandas as pd
 def access(engine,host,port,user,password,database):
     """ Access the database using sqlalchemy"""
     # make db global in order to be used in GetPandaExtracted
-    global db
+        global db
     db = tkp.db.Database(engine=engine, host=host, port=port,
                      user=user, password=password, database=database)
     db.connect()

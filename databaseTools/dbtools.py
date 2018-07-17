@@ -62,7 +62,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
                 cols_to_use = dy.columns.difference(dx.columns)
                 print dy.keys()
                 print dy[cols_to_use].keys()
-                dx = merge(dx, dy[cols_to_use], left_index=True, right_index=True, how='outer')
+                dx = merge(dx, dy[cols_to_use],how='outer')
                 # dx = pd.merge(dx,dy,on=['id','runcat'])
             except:
                 print "error no proper merge possible trying merge on id:"

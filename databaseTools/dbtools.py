@@ -58,18 +58,15 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
                 y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
 
 
-            try:
-                cols_to_use = dy.columns.difference(dx.columns)
-                print dy.keys()
-                print dy[cols_to_use].keys()
-                dx = merge(dx, dy[cols_to_use],how='outer')
-                # dx = pd.merge(dx,dy,on=['id','runcat'])
-            except:
-                print "error no proper merge possible trying merge on id:"
+            # try:
+            same_col = dy.columns.intersection(dx.columns)
+            dx = pd.merge(dx,dy,on=list(same_col))
+            # except:
+            #     print "error no proper merge possible trying merge on id:"
             #     try:
             #         dx = pd.merge(dx,dy,on=['id'])
             #     except:
-		    # print "error no column id trying merge on runcat:"
+		    #         print "error no column id trying merge on runcat:"
             #         dx = pd.merge(dx,dy,on=['runcat'])
             # dy = []
 

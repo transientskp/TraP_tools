@@ -54,8 +54,10 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
                 dy = dy.rename(index=str,columns={'id':'newsourceid'})
                 dy = dy.rename(index=str,columns={'trigger_xtrsrc':'id'})
 
-            if value.lower() == "extradsource":
-                y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)
+            if value.lower() == "image":
+                y = session.query(Image).filter(Image.dataset_id == dataset_id)
+                dy = pd.read_sql_query(y.statement,db.connection)
+                dy = dy.rename(index=str,columns={'id':'image'})
 
 
             # try:

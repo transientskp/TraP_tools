@@ -46,12 +46,12 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
             if value.lower() == "varmetric":
                 y = session.query(Varmetric).join(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
                 dy = pd.read_sql_query(y.statement,db.connection)
-                dy = dy.rename(index=str,columns={'id':'newsourceid'})
+                dy = dy.rename(index=str,columns={'id':'varmetric'})
 
             if value.lower() == "newsource":
-                y = session.query(Newsource).join(Runningcatalog.runcat).filter(Runningcatalog.dataset_id == dataset_id)
+                y = session.query(Newsource).join(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
                 dy = pd.read_sql_query(y.statement,db.connection)
-                dy = dy.rename(index=str,columns={'id':'newsourceid'})
+                dy = dy.rename(index=str,columns={'id':'newsource'})
                 dy = dy.rename(index=str,columns={'trigger_xtrsrc':'id'})
                 print dy.keys()
 

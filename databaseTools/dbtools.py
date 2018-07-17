@@ -29,10 +29,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
     x = session.query(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
     dx = pd.read_sql_query(x.statement,db.connection)
     # here we rename entries in runcat to their proper names
-    dx = dx.rename(index=str,columns={'id' : 'runcat','xtrsrc':'id'})
-    # here we drop duplicate columns from runcat
-    dx = dx.drop(columns = {'x','y','z','zone'})
-
+    dx = dx.rename(index=str,columns={'id' : 'runcat'})
 
     if kwargs is not None:
         for key,value in kwargs.iteritems():
@@ -52,7 +49,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
                 y = session.query(Newsource).join(Runningcatalog).filter(Runningcatalog.dataset_id == dataset_id)
                 dy = pd.read_sql_query(y.statement,db.connection)
                 dy = dy.rename(index=str,columns={'id':'newsource'})
-                dy = dy.rename(index=str,columns={'trigger_xtrsrc':'id'})
+                dy = dy.rename(index=str,columns={'trigger_xtrsrc':'xtrsrc'})
 
 
             if value.lower() == "image":
@@ -62,7 +59,7 @@ def GetPandaExtracted(session,dataset_id,**kwargs):
 
 
             # try:
-        
+
             same_col = dy.columns.intersection(dx.columns)
             dx = pd.merge(dx,dy,on=list(same_col))
             # except:

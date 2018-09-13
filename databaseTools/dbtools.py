@@ -27,6 +27,7 @@ def GetVarParams(session,dataset_id):
     return VarParams
 
 def MergeTables(session,dataset_id,value,dx):
+    """ Merges Tables for pandas output"""
     # if table name = extractedsource
     if value.lower() == "extractedsource":
         y = session.query(Extractedsource).join(Runningcatalog.xtrsrc).filter(Runningcatalog.dataset_id == dataset_id)

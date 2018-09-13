@@ -34,12 +34,6 @@ def bootstraps(data,sigma,xlabel,pltname,freq):
     n = np.shape(data)
     steps = n * np.square(np.log(n))
     steps = int(math.ceil(steps))
-    # for i in range(steps):
-    #     genlist = []
-    #     index = np.random.choice(np.arange(len(data)),size=len(data), replace = True)
-    #     for g in index:
-    #         genlist.append(data[g])
-    #     bootstrapped.append(np.mean(genlist))
     index = np.random.choice(np.arange(len(data)),size=steps,replace = True)
     for g in index:
         bootstrapped.append(data[g])

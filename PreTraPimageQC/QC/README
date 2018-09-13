@@ -1,0 +1,20 @@
+
+Usage: python TraP_fits_QC.py <sigmaClip> <sigmaRej> <f> <frequencies>
+
+
+Requirements:
+os, pyfits, glob, sys, numpy, scipy, math, matplotlib
+tools.py
+getRMS.py
+
+1. The script measures the RMS values for all fits images in the working directory
+2. It then produces a histogram and fits a Gaussian distribution (n.b. currently in Log space, reasonable?)
+3. The sigma thresholds are then calculated and images are sorted into good/bad.
+4. The mean RMS and +/- 1 sigma values are output onto the screen and the histogram image is saved
+5. The good images are written into "images_to_process.py" which can be input directly into TraP. Some versions of TraP allow for an alternative, thus Minimum and Maximum values are also output.
+6. Tools has been updated (July 2018) with boostrapping for small image batches.
+
+   <sigmaClip>	   : The sigma clipping threshold to be used to calculate the RMS (use identical value to that in TraP settings)
+   <sigmaRej>	   : The sigma clipping threshold to be used to reject images following the fitting of a Gaussian to all the RMS values
+   <f>	     	   : The fraction of the image to be used to calculate the RMS (use identical value to that in TraP settings)
+   <frequencies>   : Do you create sigma thresholds for each of the individual frequencies used in the dataset (best for data with multiple bands) or fit a single distribution? ("T"/"F")

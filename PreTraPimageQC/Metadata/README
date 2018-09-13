@@ -1,0 +1,17 @@
+Usage: python tidy_miriad.py
+
+Requirements:
+os, glob, numpy
+
+Instructions:
+Go to the directory containing your images and run:
+
+python tidy_miriad.py <8CharTelescope>
+
+It inserts the required metadata for the TraP tools to use. Then you need to run tkp-inject.py (http://docs.transientskp.org/tkp/r1.1/tools/tkp-inject.html) to insert the correct metadata for the LOFAR quality control steps.
+
+<8CharTelescope> could be :'MWA     ', 'ARDVARK ', etc (DON'T use the name 'LOFAR   ' -- will give you trouble. Try 'MSSS    ' or 'LOTSSS  ' instead)
+
+**WARNING** This script works on every fits image in the working directory.
+
+Feedback on this script is welcome, please e-mail: zmeyers@gmail.com (Zack) or b.a.rowlinson@uva.nl (Antonia)

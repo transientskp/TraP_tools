@@ -26,6 +26,9 @@ two catalogues, one from TraP, with  each other.
   plot the variability parameters for a specific
   dataset. FilterVariables.py is a more up to date version of the
   code - as needed for 4FreqVariablesPlot.py.
+* **filter_new_sources.py** A filtering strategy using TraP outputs
+  and deep catalogues of the field. For more details see
+  [Rowlinson et al. 2022](https://ui.adsabs.harvard.edu/abs/2022arXiv220316918R/abstract)
 * **SensitivityPlot.ipynb** Code to make an image noise map using the
   TraP outputs
 * **dblogin.py** contains the main login parameters required for the database

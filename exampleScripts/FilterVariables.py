@@ -33,7 +33,14 @@ dataset_id = 9
 database = 'AR_R4'
 sigma1 = 2 # Threshold on the reduced weighted chi^2
 sigma2 = 2 # Threshold on the variability parameter
-websiteURL = 'http://banana.transientskp.org/r4/vlo_'+database+'/runningcatalog/'
+websiteURL = 'http://banana.transientskp.org/r3/vlo_'+database+'/runningcatalog/'
+outname = 'freq3_data.csv' # name of the plotdata datafile
+
+# New inputs to search for duplicates. The BMaj is the restoring beam major axis as given in the fits header of the images processed
+BMaj = 0.00194102683426239  # in degrees
+beamwidths=5.
+                                                        
+
 
 # Connect to the database and run the queries
 session = dbtools.access(engine,host,port,user,password,database)
@@ -44,8 +51,24 @@ VarParams = dbtools.GetVarParams(session,dataset_id)
 #print VarParams[1].Runningcatalog.id
 #print [VarParams[i].Runningcatalog.id for i in range(len(VarParams))]
 
+# Remove duplicates --- note this method is SLOW!!!                                                                                                                                                                                     
+Srcs=[]
+matchSrcs=[]
+SrcAssocRadius = BMaj * beamwidths # in degrees, 10" is ~2.8e-3
+for i in range(len(VarParams)):
+    VarParams_coord = SkyCoord(ra=(VarParams[i].Runningcatalog.wm_ra*u.degree),dec=(VarParams[i].Runningcatalog.wm_decl*u.degree))
+    Srcs.append([VarParams[i].Runningcatalog.id,VarParams_coord])
+for a in range(len(Srcs)):
+    for b in range(len(Srcs)):
+        if b>a:
+            if Srcs[b][0] not in matchSrcs:
+            sep = Srcs[a][1].separation(Srcs[b][1])
+                if sep < SrcAssocRadius*u.degree:
+                    matchSrcs.append(Srcs[b][0])
+
+
 # Set up data for plotting
-plotdata = [[VarParams[i].Runningcatalog.id, VarParams[i].Varmetric.eta_int, VarParams[i].Varmetric.v_int, VarParams[i].Varmetric.lightcurve_max, VarParams[i].Varmetric.lightcurve_median, (VarParams[i].Varmetric.band.freq_central/1e6), VarParams[i].Runningcatalog.datapoints, VarParams[i].Varmetric.newsource] for i in range(len(VarParams))]
+plotdata = [[VarParams[i].Runningcatalog.id, VarParams[i].Varmetric.eta_int, VarParams[i].Varmetric.v_int, VarParams[i].Varmetric.lightcurve_max, VarParams[i].Varmetric.lightcurve_median, (VarParams[i].Varmetric.band.freq_central/1e6), VarParams[i].Runningcatalog.datapoints, VarParams[i].Varmetric.newsource] for i in range(len(VarParams)) if VarParams[i].Runningcatalog.id not in matchSrcs]
 plotdata = pd.DataFrame(data=plotdata,columns=['runcat','eta','V','maxFlx','avgFlx','freq','dpts','newSrc'])
 plotdata = plotdata.fillna('N')
 
@@ -66,6 +89,9 @@ else:
 print('Gaussian Fit eta: '+str(round(10.**paramx[0],2))+'(+'+str(round((10.**(paramx[0]+paramx[1])-10.**paramx[0]),2))+' '+str(round((10.**(paramx[0]-paramx[1])-10.**paramx[0]),2))+')')
 print('Gaussian Fit V: '+str(round(10.**paramy[0],2))+'(+'+str(round((10.**(paramy[0]+paramy[1])-10.**paramy[0]),2))+' '+str(round((10.**(paramy[0]-paramy[1])-10.**paramy[0]),2))+')')
 print 'Eta_nu threshold='+str(10.**sigcutx)+', V_nu threshold='+str(10.**sigcuty)
+
+# Save the data for plotting
+plotdata.to_csv(outname, index=False)
 
 # Find the unique frequencies for plotting
 frequencies = plotdata.freq.unique()

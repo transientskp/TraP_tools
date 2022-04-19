@@ -16,7 +16,11 @@ Example Jupyter Notebooks and standalone scripts using these tools
   different observing frequencies. Outputs a 2x2 plot of the
   variability parameters at each observing frequency.
 * **CatalogueMatching.py** is a jupyter notebook that can associate
-  two catalogues, one from TraP, with  each other.
+two catalogues, one from TraP, with  each other.
+* **correctSystematicFluxOffset.py** Sometimes there can be a
+  systematic flux offest between images of the same field. This script
+  uses the average flux density of point sources, as calculated using
+  TraP, to correct the flux  density scale in all the images.
 * **FilterVariables.py** and **FilterVariables.ipynb** Are equivalent,
   one is a standalone script and the other is a Jupyter notebook. They
   plot the variability parameters for a specific

@@ -29,6 +29,11 @@ two catalogues, one from TraP, with  each other.
 * **filter_new_sources.py** A filtering strategy using TraP outputs
   and deep catalogues of the field. For more details see
   [Rowlinson et al. 2022](https://ui.adsabs.harvard.edu/abs/2022arXiv220316918R/abstract)
+* **plotLightcurve.py** An example script to create a multi-frequency
+  lightcurve of a source - where each individual frequency is in a
+  different TraP job.
+* **plotLightcurve_v2.py**  An example script to create a multi-frequency
+  lightcurve of a source from a single TraP run.
 * **SensitivityPlot.ipynb** Code to make an image noise map using the
   TraP outputs
 * **dblogin.py** contains the main login parameters required for the database

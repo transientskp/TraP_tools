@@ -77,3 +77,18 @@ def GetPandaExtracted(session,dataset_id,tablelist):
 
 
     return dx
+
+def GetNewSrcs(session,dataset_id):
+    # Returns all the new sources identified in the pipeline run
+    NewSrcs = session.query(Newsource, Runningcatalog).select_from(join(Newsource, Runningcatalog)).filter(Runningcatalog.dataset_id ==dataset_id).all()
+    return NewSrcs
+
+
+def GetImg1Srcs(session,dataset_id):
+    # Identifies the first image in the dataset and then returns the running catalogue ids for those sources
+    images= session.query(Image).select_from(Image).filter(Image.dataset_id == dataset_id).all()
+    Imgs = [images[i].id for i in range(len(images))]
+    Img1 = min(Imgs)
+    ExtractedSrcs = session.query(Extractedsource, Assocxtrsource).select_from(join(Extractedsource, Assocxtrsource)).filter(Extractedsource.image_id == Img1).all()
+    Img1Srcs = [ExtractedSrcs[i].Assocxtrsource.runcat.id for i in range(len(ExtractedSrcs))]
+    return Img1Srcs

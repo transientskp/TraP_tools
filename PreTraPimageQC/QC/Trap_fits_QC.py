@@ -21,7 +21,7 @@ allFreqs=sys.argv[4]
 
 freqs=[]
 imageData=[]
-for filename in glob.glob('*image-pb.fits'):
+for filename in glob.glob('*.fits'):
     print "read: "  + str(filename)
     data = getRMS.read_data(pyfits.open(filename)[hdu],filename, plane=None)
     hdulist=pyfits.open(filename)
@@ -61,8 +61,8 @@ for image in imageData:
     else:
         print 'Bad image:',image[0],image[1],image[2]
 
-trapmin = image[2]>thresholds['all'][0]+thresholds['all'][2]
-trapmax = image[2]<thresholds['all'][0]+thresholds['all'][1]
+trapmin = thresholds['all'][0]+thresholds['all'][2]
+trapmax = thresholds['all'][0]+thresholds['all'][1]
 print 'Instead of using the images_to_process file,'
 print 'Minimum Value for TraP='+str(trapmin)
 print 'Maximum Value for TraP='+str(trapmax)

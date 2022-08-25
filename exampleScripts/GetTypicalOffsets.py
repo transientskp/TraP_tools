@@ -41,7 +41,7 @@ def gaussian_func(x, a, x0, sigma):
         return a * np.exp(-(x-x0)**2/(2*sigma**2))
     
 # The input database, dataset and thresholds
-dataset_id = 28
+dataset_id = 29
 database = 'AR_testing6'
 
 outfile='ds'+str(dataset_id)+'_offsets.csv'
@@ -72,7 +72,7 @@ array = plt.hist(separations,bins=nbins,histtype='stepfilled',density=False)#,lo
 
 ydata = array[0]
 x=array[1]
-xdata = [(((x[n]-x[n-1])/2.)+x[n]) for n in range(len(x)-1)]
+xdata = [(((x[n+1]-x[n])/2.)+x[n]) for n in range(len(x)-1)]
 
 initial_guess = [max(ydata),np.median(separations),np.std(separations)]
 popt, pcov = curve_fit(gaussian_func, xdata, ydata,p0=initial_guess)

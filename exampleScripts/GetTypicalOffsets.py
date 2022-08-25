@@ -32,15 +32,22 @@ from tkp.db.model import Assocxtrsource
 import astropy.units as u
 from astropy.coordinates import SkyCoord
 import os
+from scipy.optimize import curve_fit
 
+def gaussian_func(x, a, x0, sigma):
+    if x0 < 0: # force the mean to be >0
+        return 10000.
+    else:
+        return a * np.exp(-(x-x0)**2/(2*sigma**2))
+    
 # The input database, dataset and thresholds
-dataset_id = 25
+dataset_id = 28
 database = 'AR_testing6'
 
 outfile='ds'+str(dataset_id)+'_offsets.csv'
 
 if os.path.exists(outfile):
-    separations = genfromtxt(outfile, delimiter=',')
+    separations = np.genfromtxt(outfile, delimiter=',')
 else:
     # Connect to the database and run the queries
     session = dbtools.access(engine,host,port,user,password,database)
@@ -59,10 +66,23 @@ else:
                     sep = c1.separation(c2)
                     separations.append(sep.arcsecond)
     np.savetxt(outfile, separations, delimiter=',')
-            
-print(np.mean(separations),np.std(separations))
 
-plt.hist(separations,bins=50,histtype='stepfilled')
+nbins=100
+array = plt.hist(separations,bins=nbins,histtype='stepfilled',density=False)#,log=True)
+
+ydata = array[0]
+x=array[1]
+xdata = [(((x[n]-x[n-1])/2.)+x[n]) for n in range(len(x)-1)]
+
+initial_guess = [max(ydata),np.median(separations),np.std(separations)]
+popt, pcov = curve_fit(gaussian_func, xdata, ydata,p0=initial_guess)
+
+xplot = np.linspace(0,60,1000)
+plt.plot(xplot,gaussian_func(xplot,*popt))
+print('mean = '+str(popt[1])+', sigma = '+str(popt[2]))
+
+
+plt.xlim(0,30)
 plt.xlabel('Offset (arcsec)')
 plt.ylabel('Number of sources')
 plt.savefig('ds'+str(dataset_id)+'_offsets.png')

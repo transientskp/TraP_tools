@@ -163,6 +163,8 @@ range_y,fity = pltvp.gaussian_fit(y,paramy)
 axHisty.plot(fity,range_y, 'k:', linewidth=2)
 plt.savefig('ds'+str(dataset_id)+'_scatter_plots.png')
 
+plt.clf()
+
 # Create diagnostic plots
 fig = plt.figure(1,figsize=(12,12))
 ax1 = fig.add_subplot(221)
